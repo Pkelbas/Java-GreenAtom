@@ -1,5 +1,7 @@
 package com.pkelbas.forumservice.forum.services;
 
+import static com.pkelbas.forumservice.security.user.Role.ADMIN;
+
 import com.pkelbas.forumservice.forum.entities.Message;
 import com.pkelbas.forumservice.forum.entities.Topic;
 import com.pkelbas.forumservice.forum.models.MessageDto;
@@ -45,7 +47,7 @@ public class MessageServiceImpl implements MessageService {
       throws AccessDeniedException {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
     boolean hasAdminRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-        .stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+        .stream().anyMatch(role -> role.getAuthority().equals(ADMIN.roleName()));
 
     Message message = messageRepository.findById(messageId)
         .orElseThrow(() -> new IllegalArgumentException("No message by this id:" + messageId));
@@ -75,13 +77,21 @@ public class MessageServiceImpl implements MessageService {
   public void deleteMessage(Integer messageId) throws AccessDeniedException {
     String username = SecurityContextHolder.getContext().getAuthentication().getName();
     boolean hasAdminRole = SecurityContextHolder.getContext().getAuthentication().getAuthorities()
-        .stream().anyMatch(role -> role.getAuthority().equals("ROLE_ADMIN"));
+        .stream().anyMatch(role -> role.getAuthority().equals(ADMIN.roleName()));
 
     Message message = messageRepository.findById(messageId)
         .orElseThrow(() -> new IllegalArgumentException("No message by this id:" + messageId));
 
     if (!message.getUsername().equals(username) && !hasAdminRole) {
       throw new AccessDeniedException("This user lacks access rights to delete this message");
+    }
+
+    Topic topic = topicRepository.findById(message.getTopicId()).orElseThrow(() -> new IllegalArgumentException("No topic by this id:" + message.getTopicId()));
+
+    if(topic.getMessageList().size() == 1){
+      messageRepository.delete(message);
+      topicRepository.delete(topic);
+      return;
     }
 
     messageRepository.delete(message);

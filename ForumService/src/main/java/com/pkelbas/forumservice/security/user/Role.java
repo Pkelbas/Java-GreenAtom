@@ -51,4 +51,9 @@ public enum Role {
     authorities.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
     return authorities;
   }
+
+
+  public String roleName(){
+    return "ROLE_" + this.name();
+  }
 }
