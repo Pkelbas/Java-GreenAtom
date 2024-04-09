@@ -88,13 +88,13 @@ public class MessageServiceImpl implements MessageService {
 
     Topic topic = topicRepository.findById(message.getTopicId()).orElseThrow(() -> new IllegalArgumentException("No topic by this id:" + message.getTopicId()));
 
-    if(topic.getMessageList().size() == 1){
-      messageRepository.delete(message);
+    messageRepository.delete(message);
+
+    if(topic.getMessageList().size() == 0){
       topicRepository.delete(topic);
-      return;
     }
 
-    messageRepository.delete(message);
+
   }
 
 }
