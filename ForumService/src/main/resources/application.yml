@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: ForumService
+
+  datasource:
+    url : jdbc:h2:mem:testdb
+    driverClassName : org.h2.Driver
+    username : test
+    password : test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: h2
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+
