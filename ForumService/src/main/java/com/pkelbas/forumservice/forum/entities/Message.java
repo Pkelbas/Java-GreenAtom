@@ -1,5 +1,6 @@
 package com.pkelbas.forumservice.forum.entities;
 
+import com.pkelbas.forumservice.forum.models.MessageDto;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "messages")
 public class Message {
+
   @Id
   @GeneratedValue
   private Integer id;
@@ -30,4 +32,9 @@ public class Message {
 
   @Column(name = "topicId")
   private Integer topicId;
+
+
+  public MessageDto toDto() {
+    return new MessageDto(id, text, creationDate, editDate, username, topicId);
+  }
 }

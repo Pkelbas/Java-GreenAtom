@@ -1,5 +1,7 @@
 package com.pkelbas.forumservice.forum.entities;
 
+import com.pkelbas.forumservice.forum.models.MessageDto;
+import com.pkelbas.forumservice.forum.models.TopicDto;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -27,9 +29,12 @@ public class Topic {
   private String title;
 
   @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-  @JoinColumn(name="topicId")
+  @JoinColumn(name = "topicId")
   private List<Message> messageList = new LinkedList<>();
 
 
-
+  public TopicDto toDto() {
+    List<MessageDto> list = messageList.stream().map(Message::toDto).toList();
+    return new TopicDto(id, title, list);
+  }
 }

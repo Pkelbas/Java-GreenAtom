@@ -1,7 +1,7 @@
 package com.pkelbas.forumservice.forum.controllers;
 
-import com.pkelbas.forumservice.forum.entities.Message;
-import com.pkelbas.forumservice.forum.services.MessageService;
+import com.pkelbas.forumservice.forum.abstractions.MessageService;
+import com.pkelbas.forumservice.forum.models.MessageDto;
 import java.nio.file.AccessDeniedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,28 +20,28 @@ public class MessageController {
   private final MessageService service;
 
   @Autowired
-  public MessageController(MessageService service){
+  public MessageController(MessageService service) {
     this.service = service;
   }
 
   @PostMapping("/create")
-  public Message createMessage(@RequestParam Integer topicId, @RequestParam String text){
+  public MessageDto createMessage(@RequestParam Integer topicId, @RequestParam String text) {
     return service.createMessage(topicId, text);
   }
 
   @PutMapping("/update")
-  public Message updateMessage(@RequestParam Integer messageId, @RequestParam String text)
+  public MessageDto updateMessage(@RequestParam Integer messageId, @RequestParam String text)
       throws AccessDeniedException {
     return service.updateMessage(messageId, text);
   }
 
   @GetMapping("/find")
-  public Message findMessage(@RequestParam Integer messageId){
+  public MessageDto findMessage(@RequestParam Integer messageId) {
     return service.findMessage(messageId);
   }
 
   @GetMapping("/all")
-  public Iterable<Message> findAllMessagesInTopic(@RequestParam Integer topicId){
+  public Iterable<MessageDto> findAllMessagesInTopic(@RequestParam Integer topicId) {
     return service.findAllMessagesInTopic(topicId);
   }
 

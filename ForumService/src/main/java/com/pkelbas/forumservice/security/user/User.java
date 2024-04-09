@@ -1,11 +1,14 @@
 package com.pkelbas.forumservice.security.user;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +24,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "users")
+@Table(name = "users", indexes = @Index(columnList = "username"))
 public class User implements UserDetails {
 
   @Id
@@ -29,6 +32,7 @@ public class User implements UserDetails {
   public Integer id;
 
 
+  @Column(unique = true)
   public String username;
 
 
